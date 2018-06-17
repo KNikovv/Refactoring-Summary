@@ -1448,53 +1448,46 @@ to
 You have a conditional that chooses different behavior depending on the type of an object.   
 _Move each leg of the conditional to an overriding method in a subclass. Make the original method abstract_
 ```java
-
-	class Employee {
-		private int _type;
-
-		static final int ENGINEER = 0;
-		static final int SALESMAN = 1;
-		static final int MANAGER = 2;
-
-		Employee (int type) {
-			_type = type;
-		}
-		int payAmount() {
-			switch (_type) {
-				case ENGINEER:
-					return _monthlySalary;
-				case SALESMAN:
-					return _monthlySalary + _commission;
-				case MANAGER:
-					return _monthlySalary + _bonus;
-				default:
-					throw new RuntimeException("Incorrect Employee");
-				}
-			}
-		}
+	class Bird {
+	  //...
+	  double getSpeed() {
+	    switch (type) {
+	      case EUROPEAN:
+		return getBaseSpeed();
+	      case AFRICAN:
+		return getBaseSpeed() - getLoadFactor() * numberOfCoconuts;
+	      case NORWEGIAN_BLUE:
+		return (isNailed) ? 0 : getBaseSpeed(voltage);
+	    }
+	    throw new RuntimeException("Should be unreachable");
+	  }
 	}
 ```
 to
 ```java
-
-	class Employee...
-		static final int ENGINEER = 0;
-		static final int SALESMAN = 1;
-		static final int MANAGER = 2;
-
-		void setType(int arg) {
-			_type = EmployeeType.newType(arg);
-		}
-		int payAmount() {
-			return _type.payAmount(this);
-		}
+	abstract class Bird {
+	  //...
+	  abstract double getSpeed();
 	}
 
-	class Engineer...
-		int payAmount(Employee emp) {
-			return emp.getMonthlySalary();
-		}
+	class European extends Bird {
+	  double getSpeed() {
+	    return getBaseSpeed();
+	  }
 	}
+	class African extends Bird {
+	  double getSpeed() {
+	    return getBaseSpeed() - getLoadFactor() * numberOfCoconuts;
+	  }
+	}
+	class NorwegianBlue extends Bird {
+	  double getSpeed() {
+	    return (isNailed) ? 0 : getBaseSpeed(voltage);
+	  }
+	}
+
+	// Somewhere in client code
+	speed = bird.getSpeed();
 ```
 **Motivation**  
 
